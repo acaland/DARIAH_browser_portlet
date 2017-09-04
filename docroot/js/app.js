@@ -13,10 +13,12 @@ RPCManager.allowCrossDomainCalls = true;
 Canvas.resizeFonts(3);
 
 
+
+
 isc.DataSource.create({
 	ID: "quelleDS",
 	//total: 500,
-	dataURL: "http://glibrary.ct.infn.it:3500/v2/repos/dariah/quelle",
+	dataURL: "https://glibrary.ct.infn.it:3500/v2/repos/dariah/quelle",
 	//preventHTTPCaching: false,
 
 	requestProperties: {
@@ -34,7 +36,7 @@ isc.DataSource.create({
 		dsRequest.actionURL = this.dataURL + "?filter[limit]=" + dsRequest.dataPageSize + "&filter[skip]=" + dsRequest.startRow + "&include_count=true";
 		//console.log("dsRequest", dsRequest);
 		//console.log("criteria", dsRequest.resultSet.getCriteria());
-
+		// console.log("url request: ", dsRequest.actionURL);
 		var criteria = dsRequest.resultSet.getCriteria();
 		//var criteria = {titel: "Material", autor: "Eugen"};
 		var where = "";
@@ -129,7 +131,7 @@ function login(_callback) {
 		data: data,
 		useSimpleHttp: true,
 		contentType: "application/json",
-		actionURL: "http://glibrary.ct.infn.it:3500/v2/users/login",
+		actionURL: "https://glibrary.ct.infn.it:3500/v2/users/login",
 		callback: function (response, data) {
 			if (response.status != 0) {
 				console.log(response.data.response.data);
@@ -156,7 +158,7 @@ function login(_callback) {
 function populateQuelle() {
 
 	RPCManager.sendRequest({
-		actionURL: "http://glibrary.ct.infn.it:3500/v2/repos/dariah/quelle/_count",
+		actionURL: "https://glibrary.ct.infn.it:3500/v2/repos/dariah/quelle/_count",
 		httpHeaders: {"Authorization": access_token},
 		httpMethod: "GET",
 		callback: function(res, data) {
@@ -169,7 +171,7 @@ function populateQuelle() {
 
 function getRelatedMultimediaList(id) {
 	RPCManager.sendRequest({
-		actionURL: "http://glibrary.ct.infn.it:3500/v2/repos/dariah/quelle/" + id + "/quelle_multimedia_liste",
+		actionURL: "https://glibrary.ct.infn.it:3500/v2/repos/dariah/quelle/" + id + "/quelle_multimedia_liste",
 		httpHeaders: {"Authorization": access_token},
 		httpMethod: "GET",
 		useSimpleHttp: true,
@@ -187,7 +189,7 @@ function getRelatedMultimediaList(id) {
 
 function getMultimediaSource(multimediaId) {
 	RPCManager.sendRequest({
-		actionURL: "http://glibrary.ct.infn.it:3500/v2/repos/dariah/multimedia/" + multimediaId,
+		actionURL: "https://glibrary.ct.infn.it:3500/v2/repos/dariah/multimedia/" + multimediaId,
 		httpHeaders: {"Authorization": access_token},
 		httpMethod: "GET",
 		useSimpleHttp: true,
@@ -201,7 +203,7 @@ function getMultimediaSource(multimediaId) {
 
 function getAssets(source) {
 	RPCManager.sendRequest({
-		actionURL: "http://glibrary.ct.infn.it:3500/v2/repos/dariah/assets?filter[where][path][like]=" + source,
+		actionURL: "https://glibrary.ct.infn.it:3500/v2/repos/dariah/assets?filter[where][path][like]=" + source,
 		httpHeaders: {"Authorization": access_token},
 		httpMethod: "GET",
 		useSimpleHttp: true,
@@ -280,7 +282,7 @@ isc.Window.create({
 
 function getAssociatedAsset(quelle_id, _callback) {
 	RPCManager.sendRequest({
-		actionURL: 'http://glibrary.ct.infn.it:3500/v2/repos/dariah/assets?filter={"where":{"quelle_id":'+ quelle_id + '}}',
+		actionURL: 'https://glibrary.ct.infn.it:3500/v2/repos/dariah/assets?filter={"where":{"quelle_id":'+ quelle_id + '}}',
 		httpHeaders: {"Authorization": access_token},
 		useSimpleHttp: true,
 		httpMethod: "GET",
@@ -301,7 +303,7 @@ function getAssociatedAsset(quelle_id, _callback) {
 
 function saveCorrectAssetForLemma(quelle_id, asset_id) {
 	RPCManager.sendRequest({
-		actionURL: "http://glibrary.ct.infn.it:3500/v2/repos/dariah/assets/" + asset_id,
+		actionURL: "https://glibrary.ct.infn.it:3500/v2/repos/dariah/assets/" + asset_id,
 		httpHeaders: {"Authorization": access_token, "content-type": "application/json"},
 		httpMethod: "PUT",
 		data: JSON.stringify({"quelle_id": quelle_id}),
@@ -318,14 +320,14 @@ function saveCorrectAssetForLemma(quelle_id, asset_id) {
 
 function getAssetTempURL(id) {
 	RPCManager.sendRequest({
-		actionURL: "http://glibrary.ct.infn.it:3500/v2/repos/dariah/assets/" + id + "/_replicas",
+		actionURL: "https://glibrary.ct.infn.it:3500/v2/repos/dariah/assets/" + id + "/_replicas",
 		httpHeaders: {"Authorization": access_token},
 		httpMethod: "GET",
 		callback: function(res, data) {
 			var replica_id = JSON.parse(data)[0].id;
 				RPCManager.sendRequest({
 					downloadResult: true,
-					actionURL: "http://glibrary.ct.infn.it:3500/v2/repos/dariah/assets/" + id + "/_replicas/" + replica_id + "?no_redirect=true",
+					actionURL: "https://glibrary.ct.infn.it:3500/v2/repos/dariah/assets/" + id + "/_replicas/" + replica_id + "?no_redirect=true",
 					httpHeaders: {"Authorization": access_token},
 					httpMethod: "GET",
 					callback: function(res, data) {
